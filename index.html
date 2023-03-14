@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Puzzle</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-5hEf+36Ow5vF9Ppj7VY5Nd+D7V9c4MWF5n1E+G1kbF7vhKZWpXTjQ3qrjrH2Qc9W1r2I7IY5RmM6GtFjW8v3EA==" crossorigin="anonymous" />
+
+   <style>
+        #puzzle {
+          font-size: 24px;
+          text-align: center;
+        }
+        
+        #message {
+          font-size: 18px;
+          text-align: center;
+          color: red;
+        }
+        
+        input {
+          font-size: 18px;
+        }
+        
+        button {
+          font-size: 18px;
+        }
+        #image-description img {
+    max-width: 50%;
+    height: 50%;
+    
+    
+}
+body {
+  background-image: url('img/Mai\ Mai\ Miracle\ 1080p\ Backgrounds\ and\ Cinemagraphs.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+        
+        </style>
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 text-center">
+    <div id = "level"> </div>
+    <div id="level-paragraph"></div>
+  
+    <div id="puzzle"></div>
+    <div id="message"></div>
+    <div id="score"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 text-center">
+    <input type="text" id="guess" class="form-control">
+    <button class="btn btn-danger btn-lg mt-5" onclick="checkGuess()">Guess</button>
+    <button id="hint-button" class="btn btn-warning btn-lg mt-5" onclick="giveHint()">Hint</button>
+         <button id="hint-button" class="btn btn-primary btn-lg mt-5" onclick="refreshPage()">refresh</button>
+    </div>
+  </div>
+</div>
+  <script>
+  function refreshPage() {
+  location.reload();
+}
+</script>
+</html>
+<script>
+// Array of words with level properties
+// Array of words with level properties
+var words = [
+  {level: 1, word: "king", paragraph: "A MAN WHO RULES THE TRIBE AND COUNTRY." },
+{level: 2, word: "plane", paragraph: "A FLY WHICH FLYS IN THE SKY USUALLY FOUND IN AIRPORT." },
+{level: 3, word: "eat", paragraph: "HUNGER IS FINISHED WHEN YOU ___." },
+{level: 4, word: "drink", paragraph: "THIRST MUST BE QUESTED BY __." },
+{level: 5, word: "charger", paragraph: "A DEVICE THAT CHARGES ELECTRONIC DEVICES." },
+{level: 6, word: "pant", paragraph: "A TYPE OF TROUSER." },
+{level: 7, word: "shirt", paragraph: "A TYPE OF UPPER BODY GARMENT." },
+{level: 8, word: "pizza", paragraph: "A DISH MADE OF BAKED DOUGH WITH VARIOUS TOPPINGS." },
+{level: 9, word: "cold drink", paragraph: "A REFRESHING BEVERAGE USUALLY CONSUMED COLD." },
+{level: 10, word: "window", paragraph: "A OPENING IN A WALL TO LET LIGHT AND AIR IN A BUILDING." },
+{level: 11, word: "door", paragraph: "A MOVEABLE BARRIER USED TO CLOSE AN OPENING IN A WALL." },
+{level: 12, word: "devil", paragraph: "A SUPERNATURAL BEING OFTEN REPRESENTED AS A WICKED ENTITY." },
+{level: 13, word: "love", paragraph: "A STRONG FEELING OF AFFECTION AND CARE TOWARDS SOMEONE." },
+{level: 14, word: "pillow", paragraph: "A SOFT SUPPORT FOR THE HEAD OR BODY WHILE SLEEPING." },
+{level: 15, word: "petrol", paragraph: "A FLAMMABLE LIQUID USED AS A FUEL FOR INTERNAL COMBUSTION ENGINES." },
+{level: 16, word: "home", paragraph: "A PLACE WHERE ONE LIVES." },
+{level: 17, word: "books", paragraph: "A SET OF WRITTEN OR PRINTED PAGES BOUND TOGETHER." },
+{level: 18, word: "bike", paragraph: "A VEHICLE WITH TWO WHEELS USED FOR TRANSPORTATION." },
+{level: 19, word: "footballer", paragraph: "A PERSON WHO PLAYS FOOTBALL PROFESSIONALLY." },
+{level: 20, word: "sea", paragraph: "A LARGE BODY OF SALTWATER." },
+{level: 21, word: "galaxy", paragraph: "A SYSTEM OF MILLIONS OR BILLIONS OF STARS, TOGETHER WITH GAS AND DUST." },
+{level: 22, word: "solar", paragraph: "RELATING TO THE SUN." },
+{level: 23, word: "aliens", paragraph: "LIVING BEINGS THAT ARE BELIEVED TO COME FROM ANOTHER PLANET." },
+{level: 24, word: "dishwasher", paragraph: "A MACHINE THAT WASHES DISHES." },
+{level: 25, word: "mobile", paragraph: "A HAND-HELD DEVICE THAT IS CAPABLE OF MAKING AND RECEIVING PHONE CALLS." },
+{level: 26, word: "mouse", paragraph: "A SMALL RODENT THAT IS OFTEN KEPT AS A PET." },
+{level: 27, word: "hard disk", paragraph: "A COMPONENT OF A COMPUTER THAT STORES PERMANENTLY THE INFORMATION." },
+{level: 28, word: "yoyo", paragraph: "A TOY THAT IS TOSSED UP AND DOWN" },
+{ level: 29, word: "apple",   paragraph: "a round fruit with a red or green skin"},
+{ level: 30, word: "happy",    paragraph: "feeling or showing pleasure or contentment"},
+{ level: 31, word: "run",   paragraph: "move at a speed faster than a walk"},
+{ level:  32, word: "ocean",   paragraph: "a large body of saltwater"},
+{ level: 33, word: "creative",    paragraph: "relating to or involving the use of the imagination or original ideas to create something"},
+{ level: 34, word: "jump",   paragraph: "push oneself off a surface and into the air by using the muscles in one's legs and feet"},
+{ level: 35, word: "music",   paragraph: "vocal or instrumental sounds (or both) combined in such a way as to produce beauty of form, harmony, and expression of emotion"},
+
+{ level: 36, word: "angry",    paragraph: "having a strong feeling of or showing annoyance, displeasure, or hostility; full of anger"},
+{ level: 37, word: "science",   paragraph: "the intellectual and practical activity encompassing the systematic study of the structure and behavior of the physical and natural world through observation and experiment"},
+{ level: 38, word: "laugh",   paragraph: "make the sounds and movements of one's face that indicate amusement or joy"},
+{ level: 39, word: "mountain",   paragraph: "a large natural elevation of the earth's surface rising abruptly from the surrounding level"},
+{ level: 40, word: "effervescent",    paragraph: "giving off bubbles; fizzy; vivacious and enthusiastic"},
+{ level: 41, word: "explore",   paragraph: "travel through an unfamiliar area in order to learn about it"},
+{ level:42, word: "chocolate",   paragraph: "a food made from roasted ground cacao beans, typically sweetened"},
+{ level:43, word: "honest",    paragraph: "free of deceit; truthful and sincere"},
+{ level: 44, word: "compose",   paragraph: "write or create (a work of art, especially music or poetry)"},
+
+{ level: 45, word: "penguin",   paragraph: "a flightless seabird of the Southern Hemisphere, with black upper parts and white underparts and wings developed into flippers for swimming under water"},
+{ level: 46, word: "brave",    paragraph: "ready to face and endure danger or pain; showing courage"},
+
+{ level: 47, word: "photograph",   paragraph: "a picture made using a camera, in which an image is focused onto film or other light-sensitive material and then made visible and permanent by chemical treatment or digital processing"},
+{ level: 48, word: "strive",   paragraph: "make great efforts to achieve or obtain something"},
+{ level: 49, word: "dog",   paragraph: "a furry animal that barks and wags its tail"},
+{ level: 50, word: "happy",    paragraph: "feeling or showing joy and pleasure"},
+{ level:51, word: "swim",   paragraph: "to move through water using your arms and legs"},
+  { level:52, word: "cake",   paragraph: "a sweet dessert made from flour, sugar, and eggs"},
+  { level:53, word: "big",    paragraph: "very large in size"},
+  { level:54, word: "sing",   paragraph: "to make musical sounds with your voice"},
+  { level:55, word: "bird",   paragraph: "a feathered animal that can fly"},
+  { level:56, word: "funny",    paragraph: "causing laughter and amusement"},
+  { level:57, word: "jump",   paragraph: "to push yourself off the ground with your legs and then come back down"},
+  { level:58, word: "book",   paragraph: "a written or printed work that tells a story or gives information"},
+  { level:59, word: "apple",   paragraph: "a round fruit with red, green, or yellow skin"},
+  { level:60, word: "baby",   paragraph: "a young human or animal"},
+  { level:61, word: "ball",   paragraph: "a round object that bounces or rolls"},
+  { level:62, word: "bear",   paragraph: "a large furry animal with a short tail and sharp claws"},
+  { level:63, word: "bed",   paragraph: "a piece of furniture for sleeping on"},
+  { level:64, word: "bike",   paragraph: "a two-wheeled vehicle that you ride by pedaling"},
+  { level:65,word: "bird",   paragraph: "a feathered animal that can fly"},
+  { level:66,word: "boat",   paragraph: "a vehicle that floats on water and is used for transportation or leisure"},
+  { level:67, word: "book",   paragraph: "a written or printed work that tells a story or gives information"},
+  { level:68, word: "box",   paragraph: "a container with a flat base and sides, typically square or rectangular and having a lid"},
+  { level:69, word: "boy",   paragraph: "a male child or teenager"},
+  { level:70, word: "bread",   paragraph: "a food made of flour, water, and yeast or baking powder, and baked in an oven"},
+  { level:71, word: "brother",   paragraph: "a male sibling"},
+  { level:72,word: "cake",   paragraph: "a sweet dessert made from flour, sugar, and eggs"},
+  { level:73, word: "car",   paragraph: "a four-wheeled vehicle that runs on an engine and is used for transportation"},
+  { level:74, word: "cat",   paragraph: "a small furry animal with whiskers and sharp claws"},
+  { level:75, word: "chair",   paragraph: "a piece of furniture with a seat and back for one person to sit on"},
+  { level:76, word: "chicken",   paragraph: "a bird that is commonly raised for meat and eggs"},
+  { level:77, word: "child",   paragraph: "a young human"},
+  { level:78, word: "cloud",   paragraph: "a visible mass of water droplets or ice crystals suspended in the atmosphere"},
+  { level:79, word: "cow",   paragraph: "a large domesticated mammal with hooves and a broad, flat nose"},
+  { level:80, word: "dad",   paragraph: "a father"},
+
+{ level:81, word: "day",   paragraph: "the time between sunrise and sunset"},
+  { level:82, word: "dog",   paragraph: "a furry animal that barks and wags its tail"},
+  { level:83, word: "doll",   paragraph: "a toy that looks like a human"},
+  { level:84, word: "door",   paragraph: "a movable barrier used to close off an entrance"},
+  { level:85, word: "dragon",   paragraph: "a mythical creature with wings and a long tail"},
+  { level:86, word: "duck",   paragraph: "a waterbird with a broad beak, webbed feet, and a flattened tail"},
+
+{ level:87, word: "earth",   paragraph: "the planet we live on"},
+  { level:88, word: "egg",   paragraph: "a round or oval object laid by a female bird or reptile"},
+  { level:89, word: "eye",   paragraph: "an organ in the face used for seeing"},
+  { level:90, word: "family",   paragraph: "a group of people who are related to each other"},
+  { level:91, word: "farm",   paragraph: "a piece of land used for growing crops or raising animals"},
+  { level:92, word: "fire",   paragraph: "a chemical reaction that produces heat and light"},
+  { level:93, word: "fish",   paragraph: "an animal that lives in water and has fins and scales"},
+  { level:94, word: "flower",   paragraph: "a colorful plant with petals and a sweet smell"},
+  { level:95, word: "food",   paragraph: "something that is eaten to provide nourishment for the body"},
+  { level:96, word: "friend",   paragraph: "a person you enjoy spending time with and care about"},
+  { level:97, word: "frog",   paragraph: "an amphibian with a long, sticky tongue and powerful legs for jumping"},
+  { level:98, word: "fruit",   paragraph: "a sweet and juicy edible product of a plant, typically with seeds"},
+  { level:99, word: "garden",   paragraph: "a place where plants are grown for decoration, food, or enjoyment"},
+  { level:100, word: "girl",   paragraph: "a female child or teenager"},
+  { level:101, word: "grass",   paragraph: "a green plant with narrow leaves that grows in fields or lawns"},
+  { level:102, word: "hand",   paragraph: "the part of the body at the end of the arm, used for grasping and holding things"},
+  { level:103, word: "head",   paragraph: "the upper part of the body where the brain and sensory organs are located"},
+  { level:104, word: "heart",   paragraph: "the organ in the chest that pumps blood through the body"},
+  { level:105, word: "horse",   paragraph: "a large animal with four legs and a mane, often used for riding or pulling carts"},
+  { level:106, word: "house",   paragraph: "a building where people live"},
+  { level:107, word: "insect",   paragraph: "a small animal with six legs, often with wings and an exoskeleton"},
+  { level:108, word: "jacket",   paragraph: "a piece of clothing worn on the upper body, often with sleeves and a zipper or buttons"},
+  { level:109, word: "jelly",   paragraph: "a sweet and sticky substance made from fruit juice and sugar"},
+  { level:110, word: "juice",   paragraph: "a liquid extracted from fruits and vegetables"},
+  { level:111, word: "jump",   paragraph: "to push off the ground with the feet and move through the air"},
+
+
+];
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+words = shuffle(words);
+
+// Score
+var score = 0;
+
+var level = 1;
+
+
+// Current level
+var currentLevel = 1;
+
+// Word to guess
+var word = words[currentLevel-1].word;
+
+
+
+// Array of letters in the word
+var letters = word.split("");
+
+// Number of guesses
+var guesses = 0;
+
+// Display the puzzle
+var puzzle = "";
+for (var i = 0; i < letters.length; i++) {
+  puzzle += "_ ";
+}
+document.getElementById("puzzle").innerHTML = puzzle;
+document.getElementById("score").innerHTML = `<h1>Score ${score}</h1>`;
+document.getElementById("level").innerHTML = `<h1>Level ${level}</h1>`;
+document.getElementById("level-paragraph").innerHTML = words[currentLevel-1].paragraph;
+
+
+
+
+
+
+
+var hintCount = 0;
+
+function giveHint(){
+  var maxHints = 10;
+  var hintButton = document.getElementById("hint-button");
+
+  if (hintCount < maxHints){
+    var hintIndex = Math.floor(Math.random()*letters.length);
+    puzzle = puzzle.substr(0, hintIndex*2) + letters[hintIndex] + puzzle.substr(hintIndex*2 + 1);
+    document.getElementById("puzzle").innerHTML = puzzle;
+    hintCount++;
+
+    var hintsRemaining = maxHints - hintCount;
+    hintButton.textContent = "Hint (" + hintsRemaining + " left)";
+  } else {
+    alert("You have used all of your hints!");
+  }
+}
+
+
+
+// Check the user's guess
+function checkGuess() {
+  var guess = document.getElementById("guess").value;
+  if (guess.length !== 1) {
+    document.getElementById("message").innerHTML = "Please enter a single letter.";
+    return;
+  }
+  if (letters.indexOf(guess) === -1) {
+    document.getElementById("message").innerHTML = "Sorry, that letter is not in the word.";
+    guesses++;
+  } else {
+    for (var i = 0; i < letters.length; i++) {
+      if (letters[i] === guess) {
+        puzzle = puzzle.substr(0, i*2) + guess + puzzle.substr(i*2 + 1);
+      }
+    }
+    document.getElementById("puzzle").innerHTML = puzzle;
+    document.getElementById("message").innerHTML = "Correct!";
+
+
+    if (puzzle.indexOf("_") === -1) {
+      alert("You won! The word was " + word + "."+ "your going the next level");
+      level++
+      score+=10;
+      document.getElementById("score").innerHTML =`<h1>Score ${score}</h1>`;
+       document.getElementById("level").innerHTML = `<h1>Level ${level}</h1>`;
+      currentLevel++;
+      
+      if(currentLevel > words.length){
+        alert("You finished all levels, congratulations!")
+      }else{
+        // reset the game variables and puzzle for the next level
+        word = words[currentLevel-1].word;
+        letters = word.split("");
+        puzzle = "";
+        for (var i = 0; i < letters.length; i++) {
+          puzzle += "_ ";
+        }
+        document.getElementById("puzzle").innerHTML = puzzle;
+        document.getElementById("level-paragraph").innerHTML = words[currentLevel-1].paragraph;
+        
+        guesses = 0;
+      }
+    }
+  }
+  if (guesses === 6) {
+    alert("You lose! The word was " + word + ".");
+    currentLevel++;
+    if(currentLevel > words.length){
+      alert("You finished all levels, congratulations!")
+    }else{
+      // reset the game variables and puzzle for the next level
+      word = words[currentLevel-1].word;
+      letters = word.split("");
+      puzzle = "";
+      for (var i = 0; i < letters.length; i++) {
+        puzzle += "_ ";
+      }
+      document.getElementById("puzzle").innerHTML = puzzle;
+      guesses = 0;
+    }
+  }
+  document.getElementById("current_level").innerHTML = currentLevel;
+}
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</body>
+</html>
